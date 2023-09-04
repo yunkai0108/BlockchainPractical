@@ -74,6 +74,22 @@ Product</button>
 
 <br>
 
+</div>
+
+<div id="transactionSection">
+
+	<label for="Pname">Product name:</label><br>
+
+	<input type="text" id="Pname" name="Pname"><br>
+
+	<label for="Pprice">Product price (wei):</label><br>
+
+	<input type="number" id="Pprice" name="Pprice"> <br>
+
+	<button id="submit" onclick="setNewProduct()"> Update Product</button>
+
+</div>
+
 
 <script>
 
@@ -219,6 +235,52 @@ Product</button>
 
         document.getElementById("contractArea").innerHTML = "connected to Product smart contract";
     }
+
+	//3-read data from smart contract
+
+	const readfromContract = async () => {
+		const data = await window.contract.methods.getInitialProduct().call();
+
+		document.getElementById("ownerProduct").innerHTML = `Owner Product information:<br> Product Name: ${data[0]},<br> Price(wei): ${data[1]} <br>Owner Address: ${data[2]}`;
+
+		document.getElementById("dataArea0").innerHTML = data[0];
+
+		document.getElementById("dataArea1").innerHTML = data[1];
+
+		document.getElementById("dataArea2").innerHTML = data[2];
+
+	}
+
+	//4- buyer buy the product, transfer wei, update the ownership
+
+	const BuyerBuyProduct = async () =>{
+
+		//need to retrieve product data from the contract
+
+		const data = await window.contract.methods.getInitialProduct().call();
+
+		const price = data[1];
+
+		const ownerAddress = data[2];
+
+		await window.contract.methods.buyProduct(ownerAddress).send({from: account, value:price });
+	}
+
+	//5- set new product- product name and price, owner address
+
+	const setNewProduct = async () => {
+
+		const ProductName = document.getElementById("Pname").value;
+
+		const ProductPrice = document.getElementById("Pprice").value;
+
+		await window.contract.methods.setProduct(ProductName, ProductPrice).send({from: account });
+
+		document.getElementById("Pname").value = "";
+
+		document.getElementById("Pprice").value= "";
+
+	}
     
 </script>
 </body>
