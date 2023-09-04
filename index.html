@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
+<title>METAMASK CONNECTION</title>
+
+<style>
+
+body {
+
+background-color: rgb(247, 240, 242);
+
+font-size: 33px;
+
+text-align: center;
+
+}
+
+button {
+
+background-color: rgb(211, 241, 231);
+
+font-size: 30px;
+
+font-family: Impact, Haettenschweiler, 'Arial Narrow',
+sans-serif;
+
+}
+
+button:hover {
+
+background-color: rgb(146, 205, 245);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<br>
+
+<button onclick="accessToMetamask()">Connect
+Metamask</button> <br>
+
+<p id="accountArea"></p>
+
+<br>
+
+<button onclick="accessToContract()">Connect to Smart
+Contract</button> <br>
+
+<p id="contractArea"></p>
+
+<br>
+
+<button onclick="readfromContract()">get Data from
+Contract</button> <br>
+
+<p id ="ownerProduct"></p>
+
+<p id="dataArea0"></p>
+
+<p id="dataArea1"></p>
+
+<p id="dataArea2"></p>
+
+<button id="buy" onclick="BuyerBuyProduct()"> BUY
+Product</button>
+
+<br>
+
+
+<script>
+
+    //1- connect metamask
+    
+    let account;
+    
+    const accessToMetamask = async () => {
+    
+    if(window.ethereum !== "undefined") {
+    
+    const accounts = await ethereum.request({ method:
+    "eth_requestAccounts"});
+    
+    account = accounts[0];
+    
+    document.getElementById("accountArea").innerHTML =
+    account;
+    
+    }
+    
+    }
+
+    //2- connect to smart contract
+    const accessToContract = async () =>{
+        ABI = [
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_toReceiver",
+				"type": "address"
+			}
+		],
+		"name": "buyProduct",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_productName",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			}
+		],
+		"name": "setProduct",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [],
+		"name": "buyer",
+		"outputs": [
+			{
+				"internalType": "address payable",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getInitialProduct",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address payable",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "productName",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "productPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+        Address = "0x1606111D9fadD05110DCB45971D70A93E5561EC0";
+        window.web3 = await new Web3(window.ethereum); //how to access to smart contract
+
+        window.contract = await new window.web3.eth.Contract( ABI, Address); //how you create an instance of that contract by using the abi and address
+
+        document.getElementById("contractArea").innerHTML = "connected to Product smart contract";
+    }
+    
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
